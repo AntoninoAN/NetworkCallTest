@@ -31,7 +31,7 @@ class FragmentDisplay: Fragment() {
         val view = inflater.inflate(
             R.layout.fragment_display,
             container,
-            true)
+            false)
         recyclerView = view.rv_fragment_display
         recyclerView.layoutManager =
             LinearLayoutManager(activity)
