@@ -2,6 +2,7 @@ package com.example.contactstest
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.lang.StringBuilder
 
 /*
 PARCELABLE AND SERIALIZABLE
@@ -53,7 +54,11 @@ public class ContactItem{
 data class PhoneItem(
     val mobile: String,
     val home: String,
-    val office: String): Parcelable
+    val office: String): Parcelable{
+    override fun toString() =
+        StringBuilder("Home: $home\nMobile: $mobile\nOffice: $office")
+            .toString()
+}
 //data class TmoResponse(page: TmoItem)
 //data class TmoItem(val cards: List<CardItem>)
 //data class CardItem(val value: String,
