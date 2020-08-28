@@ -7,7 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_layout.view.*
 
-class ContactsAdapter(val dataSet: ContactResponse): RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(){
+class ContactsAdapter(val dataSet: ContactResponse,
+        val listener: OpenDetailFragment): RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(){
 
     class ContactsViewHolder(contactsItem: View):
         RecyclerView.ViewHolder(contactsItem){
@@ -15,6 +16,14 @@ class ContactsAdapter(val dataSet: ContactResponse): RecyclerView.Adapter<Contac
             contactsItem.tv_item_name
         val tvItemEmail: TextView =
             contactsItem.tv_item_email
+
+        fun onBind(item: ContactItem, listener: OpenDetailFragment){
+            tvItemName.text = item.name
+            tvItemEmail.text = item.email
+
+            itemView.setOnClickListener { listener.openFragment(item) }
+        }
+
         /*
         public ContactsViewHolder(View contactsItem){
              val tvItemName: TextView =
@@ -53,8 +62,9 @@ class ContactsAdapter(val dataSet: ContactResponse): RecyclerView.Adapter<Contac
      */
     override fun onBindViewHolder(holder: ContactsViewHolder,
                                   position: Int) {
-        holder.tvItemName.text = dataSet.contacts[position].name
-        holder.tvItemEmail.text = dataSet.contacts[position].email
+//        holder.tvItemName.text = dataSet.contacts[position].name
+//        holder.tvItemEmail.text = dataSet.contacts[position].email
+        holder.onBind(dataSet.contacts[position], listener)
     }
 
 }

@@ -17,7 +17,7 @@ class B(){
 }
  */
 
-class FragmentDisplay: Fragment() {
+class FragmentDisplay: Fragment(), OpenDetailFragment {
 
     lateinit var adapter: ContactsAdapter
     lateinit var recyclerView: RecyclerView
@@ -31,12 +31,12 @@ class FragmentDisplay: Fragment() {
         val view = inflater.inflate(
             R.layout.fragment_display,
             container,
-            true)
+            false)
         recyclerView = view.rv_fragment_display
         recyclerView.layoutManager =
             LinearLayoutManager(activity)
         arguments?.getParcelable<ContactResponse>(EXTRA_DATA_SET)?.let {
-            adapter = ContactsAdapter(it)
+            adapter = ContactsAdapter(it, this)
             recyclerView.adapter = adapter
         }
         return view
@@ -47,7 +47,7 @@ class FragmentDisplay: Fragment() {
      *
      */
     fun passData(dataSet: ContactResponse){
-        recyclerView.adapter = ContactsAdapter(dataSet)
+        //recyclerView.adapter = ContactsAdapter(dataSet)
     }
 
     companion object{
@@ -60,5 +60,10 @@ class FragmentDisplay: Fragment() {
             fragmentDisplay.arguments = bundle
             return fragmentDisplay
         }
+    }
+
+    override fun openFragment(dataItem: ContactItem) {
+        (activity as MainActivity)
+            .createFragmentDetail(dataItem)
     }
 }
