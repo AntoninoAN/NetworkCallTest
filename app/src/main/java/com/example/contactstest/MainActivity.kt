@@ -13,10 +13,19 @@ class MainActivity : AppCompatActivity() {
     val urlBaseUrl = "https://api.androidhive.info/"
     val urlEndpoint = "contacts"
 
+    //Lazy<FragmentDisplay> => UNINITIALIZED
+    //invoke lambda
+//    val displayFragment: FragmentDisplay by lazy {
+//        FragmentDisplay()
+//    }
+    //df1 = Fr()
+    //df1.passData()
+    //df2 = Fr()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val policy =
             StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
@@ -37,17 +46,21 @@ class MainActivity : AppCompatActivity() {
         val network = NetworkContacts(urlContacts)
         val contactsResponse =
             network.executeNetworkCall()
-        var counter = 0
+        val displayFragment = FragmentDisplay.newInstance(contactsResponse)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_fragment_container,
+                displayFragment)
+            .commit()
 
+//        var counter = 0
 //        contactsResponse.contacts.count({
 //            counter++
 //            if(counter < 5)
 //        }).forEach {
 //            Log.d("MainActivity", it.name)
 //        }
-
-        Toast.makeText(this,
-            contactsResponse.toString(),
-            Toast.LENGTH_LONG).show()
+//        Toast.makeText(this,
+//            contactsResponse.toString(),
+//            Toast.LENGTH_LONG).show()
     }
 }

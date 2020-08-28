@@ -1,14 +1,30 @@
 package com.example.contactstest
 
-data class ContactResponse(val contacts: List<ContactItem>)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+/*
+PARCELABLE AND SERIALIZABLE
+Process to decompose complex data. => Marshalling
+ContactResponse => decompose
+Reconstruction == ContactResponse
+
+PARCELABLE  ANDROID (android.os) => Parcel data container for IPC
+Inter Process Communication
+SERIALIZABLE  JAVA (javax.seria..?) => Java Reflection
+ */
+
+@Parcelize
+data class ContactResponse(val contacts: List<ContactItem>): Parcelable
+
+@Parcelize
 data class ContactItem(
     val id: String,
     val name: String,
     val email: String,
     val address: String,
     val gender: String,
-    val phone: PhoneItem)
+    val phone: PhoneItem): Parcelable
 
 /*
 public class ContactItem{
@@ -33,12 +49,11 @@ public class ContactItem{
 
 }
  */
-
+@Parcelize
 data class PhoneItem(
     val mobile: String,
     val home: String,
-    val office: String
-)
+    val office: String): Parcelable
 //data class TmoResponse(page: TmoItem)
 //data class TmoItem(val cards: List<CardItem>)
 //data class CardItem(val value: String,
