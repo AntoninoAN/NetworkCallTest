@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.ConnectivityManager
+import android.net.*
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -141,7 +141,6 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                 }
             }
-
         }
     }
 
@@ -158,6 +157,30 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+//    fun registerCallbackConnection(){
+//        val connectivityManager = this.getSystemService(
+//            Context.CONNECTIVITY_SERVICE
+//        ) as ConnectivityManager
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            connectivityManager.registerNetworkCallback(NetworkRequest.Builder()
+//                .setNetworkSpecifier(object: NetworkSpecifier(){})
+//                .addTransportType(TransportInfo())
+//                ,ContactNetworkCallback)
+//        }
+//    }
+//
+//    object ContactNetworkCallback: ConnectivityManager.NetworkCallback() {
+//        override fun onAvailable(network: Network) {
+//            super.onAvailable(network)
+//        }
+//
+//        override fun onCapabilitiesChanged(
+//            network: Network,
+//            networkCapabilities: NetworkCapabilities) {
+//            super.onCapabilitiesChanged(network, networkCapabilities)
+//
+//        }
+//    }
 }
 
 //Extension Functions
@@ -167,10 +190,17 @@ fun Context.checkInternetConnection(): Boolean{
         Context.CONNECTIVITY_SERVICE
     ) as ConnectivityManager
 
-    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-    val activeNetwork =  connectivityManager.activeNetworkInfo
-    return activeNetwork?.isConnected?: false
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val activeNetwork = connectivityManager.activeNetwork
+        connectivityManager.getNetworkCapabilities(activeNetwork)
+            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            ?: false
+    }else{
+        connectivityManager.activeNetworkInfo?.isConnected ?: false
+    }
 }
+
+
 
 //public class Utility extends Fragment{
 //    public static Boolean validateUserName(String userName){}
