@@ -1,8 +1,10 @@
-package com.example.contactstest
+package com.example.contactstest.model
 
 import android.app.IntentService
 import android.content.Intent
 import android.util.Log
+import com.example.contactstest.view.ACTION_NETWORK_BROADCAST
+import com.example.contactstest.view.EXTRA_NETWORK_BROADCAST
 
 const val EXTRA_IS_URL = "ContactsIntentService"
 
@@ -18,7 +20,7 @@ class ContactsIntentService : IntentService("Contacts") {
                     executeNetworkCall()
                 }
             //todo send the Broadcast...
-            Intent(ACTION_NETWORK_BROADCAST).also {myIntent->
+            Intent(ACTION_NETWORK_BROADCAST).also { myIntent->
                 myIntent.putExtra(EXTRA_NETWORK_BROADCAST, contactResponse)
                 baseContext.sendBroadcast(myIntent)
             }

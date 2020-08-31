@@ -1,10 +1,12 @@
-package com.example.contactstest
+package com.example.contactstest.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.contactstest.R
+import com.example.contactstest.model.ContactItem
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 
 class FragmentDetail: Fragment() {
@@ -15,7 +17,8 @@ class FragmentDetail: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        val view = inflater.inflate(R.layout.fragment_detail,
+        val view = inflater.inflate(
+            R.layout.fragment_detail,
         container, false)
         arguments?.getParcelable<ContactItem>(EXTRA_DETAIL_DATA)?.run {
             view.tv_name.text = this.name
@@ -28,10 +31,11 @@ class FragmentDetail: Fragment() {
 
     companion object{
         val EXTRA_DETAIL_DATA = "FragmentDetail"
-        fun createFragmentDetail(dataItem: ContactItem): FragmentDetail{
+        fun createFragmentDetail(dataItem: ContactItem): FragmentDetail {
             return FragmentDetail().apply {
                 arguments = Bundle().apply {
-                    this.putParcelable(EXTRA_DETAIL_DATA,
+                    this.putParcelable(
+                        EXTRA_DETAIL_DATA,
                     dataItem)
                 }
             }

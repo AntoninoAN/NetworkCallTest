@@ -1,4 +1,4 @@
-package com.example.contactstest
+package com.example.contactstest.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.contactstest.R
+import com.example.contactstest.model.ContactItem
+import com.example.contactstest.model.ContactResponse
 import kotlinx.android.synthetic.main.fragment_display.view.*
 
 /*
@@ -17,7 +20,8 @@ class B(){
 }
  */
 
-class FragmentDisplay: Fragment(), OpenDetailFragment {
+class FragmentDisplay: Fragment(),
+    OpenDetailFragment {
 
     lateinit var adapter: ContactsAdapter
     lateinit var recyclerView: RecyclerView
@@ -53,7 +57,7 @@ class FragmentDisplay: Fragment(), OpenDetailFragment {
     companion object{
         const val EXTRA_DATA_SET = "ExtraDataSet"
 
-        fun newInstance(dataSet: ContactResponse): FragmentDisplay{
+        fun newInstance(dataSet: ContactResponse): FragmentDisplay {
             val fragmentDisplay = FragmentDisplay()
             val bundle = Bundle()
             bundle.putParcelable(EXTRA_DATA_SET, dataSet)

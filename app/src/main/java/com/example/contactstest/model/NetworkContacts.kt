@@ -1,4 +1,4 @@
-package com.example.contactstest
+package com.example.contactstest.model
 
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -49,9 +49,11 @@ class NetworkContacts(val url: String) {
         for(index in 0 until jsonArray.length()){
             val jsonItem = jsonArray.get(index) as JSONObject
             val jsonItemPhone = jsonItem.getJSONObject("phone")
-            phoneItem = PhoneItem(jsonItemPhone.getString("mobile"),
-            jsonItemPhone.getString("home"),
-            jsonItemPhone.getString("office"))
+            phoneItem = PhoneItem(
+                jsonItemPhone.getString("mobile"),
+                jsonItemPhone.getString("home"),
+                jsonItemPhone.getString("office")
+            )
 
             contactItem = ContactItem(
                 phone = phoneItem,

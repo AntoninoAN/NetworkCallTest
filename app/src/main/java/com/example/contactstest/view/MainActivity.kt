@@ -1,4 +1,4 @@
-package com.example.contactstest
+package com.example.contactstest.view
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,10 +7,15 @@ import android.content.IntentFilter
 import android.net.*
 import android.os.Build
 import android.os.Bundle
-import android.os.StrictMode
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.contactstest.R
+import com.example.contactstest.model.ContactItem
+import com.example.contactstest.model.ContactResponse
+import com.example.contactstest.model.NetworkContacts
+import com.example.contactstest.model.RetrofitNetwork
+import com.example.contactstest.presenter.PresenterDisplay
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,11 +23,15 @@ import retrofit2.Response
 const val ACTION_NETWORK_BROADCAST = "NetworkBroadcastReceiver"
 const val EXTRA_NETWORK_BROADCAST = "NetworkBroadcastReceiver"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DisplayInterface {
 
-    val urlContacts: String = "https://api.androidhive.info/contacts/"
-    val urlBaseUrl = "https://api.androidhive.info/"
-    val urlEndpoint = "contacts"
+//    val urlContacts: String = "https://api.androidhive.info/contacts/"
+//    val urlBaseUrl = "https://api.androidhive.info/"
+//    val urlEndpoint = "contacts"
+
+    val presenterDisplay: PresenterDisplay by lazy{
+        PresenterDisplay()
+    }
 
     //Lazy<FragmentDisplay> => UNINITIALIZED
     //invoke lambda
@@ -42,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 //            ContactsIntentService::class.java)
 //        contactExplicit.putExtra(EXTRA_IS_URL , urlContacts)
 //        startService(contactExplicit)
+        onBindPresenter()
 
         initNetworkCall()
 
@@ -60,27 +70,7 @@ class MainActivity : AppCompatActivity() {
 //
 //    });
 
-    private fun getMeContacts(){
-        val network = NetworkContacts(urlContacts)
-        val contactsResponse =
-            network.executeNetworkCall()
-        val displayFragment = FragmentDisplay.newInstance(contactsResponse)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_fragment_container,
-                displayFragment)
-            .commit()
 
-//        var counter = 0
-//        contactsResponse.contacts.count({
-//            counter++
-//            if(counter < 5)
-//        }).forEach {
-//            Log.d("MainActivity", it.name)
-//        }
-//        Toast.makeText(this,
-//            contactsResponse.toString(),
-//            Toast.LENGTH_LONG).show()
-    }
 
 //    RetrofitNetwork.initRetrofit().getMeContacts()
 //    .enqueue(new Callback<ContactResponse>(){
@@ -88,24 +78,7 @@ class MainActivity : AppCompatActivity() {
 //           onREsponse(){}
 //    })
 
-    fun initNetworkCall(){
-        RetrofitNetwork.initRetrofit(this)
-            .getMeContacts()
-            .enqueue(object: Callback<ContactResponse>{
-                override fun onFailure(call: Call<ContactResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Pay your internet connection",
-                        Toast.LENGTH_SHORT).show();
-                }
 
-                override fun onResponse(
-                    call: Call<ContactResponse>,
-                    response: Response<ContactResponse>
-                ) {
-                    if(response.isSuccessful)
-                        initFragment(response.body())
-                }
-            })
-    }
 
     private fun initFragment(body: ContactResponse?) {
         body?.let {
@@ -149,12 +122,35 @@ class MainActivity : AppCompatActivity() {
         val fragmentDetail = FragmentDetail
             .createFragmentDetail(dataItem)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_fragment_container,
+            .replace(
+                R.id.fl_fragment_container,
             fragmentDetail)
             .addToBackStack(null)
             .setCustomAnimations(android.R.anim.slide_in_left,
             android.R.anim.fade_out)
             .commit()
+    }
+
+    override fun initNetworkCall() {
+        presenterDisplay.initNetworkCall(this)
+    }
+
+    override fun displayData(dataSet: ContactResponse) {
+        initFragment(dataSet)
+    }
+
+    override fun onBindPresenter() {
+        presenterDisplay.onBind(this)
+    }
+
+    override fun errorMessage(errorMessage: String) {
+        Toast.makeText(this@MainActivity, errorMessage,
+            Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        presenterDisplay.unBind()
+        super.onDestroy()
     }
 
 //    fun registerCallbackConnection(){
@@ -183,22 +179,7 @@ class MainActivity : AppCompatActivity() {
 //    }
 }
 
-//Extension Functions
-// fun <Target>.extensionFunctionName(anyParam: Any): Unit{}
-fun Context.checkInternetConnection(): Boolean{
-    val connectivityManager = this.getSystemService(
-        Context.CONNECTIVITY_SERVICE
-    ) as ConnectivityManager
 
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val activeNetwork = connectivityManager.activeNetwork
-        connectivityManager.getNetworkCapabilities(activeNetwork)
-            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            ?: false
-    }else{
-        connectivityManager.activeNetworkInfo?.isConnected ?: false
-    }
-}
 
 
 

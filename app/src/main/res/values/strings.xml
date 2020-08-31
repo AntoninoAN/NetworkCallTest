@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ContactsTest</string>
+    <string name="urlContacts">https://api.androidhive.info/contacts/</string>
+    <string name="urlBaseUrl">https://api.androidhive.info/</string>
+    <string name="urlEndpoint">contacts</string>
 </resources>

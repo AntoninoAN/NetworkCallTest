@@ -1,6 +1,7 @@
-package com.example.contactstest
+package com.example.contactstest.model
 
 import android.content.Context
+import com.example.contactstest.utility.checkInternetConnection
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -17,9 +18,13 @@ interface RetrofitNetwork {
     fun getMeContacts(): Call<ContactResponse>
 
     companion object{
-        fun initRetrofit(context: Context): RetrofitNetwork{
+        fun initRetrofit(context: Context): RetrofitNetwork {
             return Retrofit.Builder()
-                .client(createCacheClient(context))
+                .client(
+                    createCacheClient(
+                        context
+                    )
+                )
                 .baseUrl("https://api.androidhive.info/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

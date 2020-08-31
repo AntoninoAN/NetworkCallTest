@@ -1,14 +1,19 @@
-package com.example.contactstest
+package com.example.contactstest.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.contactstest.R
+import com.example.contactstest.model.ContactItem
+import com.example.contactstest.model.ContactResponse
 import kotlinx.android.synthetic.main.item_layout.view.*
 
 class ContactsAdapter(val dataSet: ContactResponse,
-        val listener: OpenDetailFragment): RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(){
+                      val listener: OpenDetailFragment
+)
+    : RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(){
 
     class ContactsViewHolder(contactsItem: View):
         RecyclerView.ViewHolder(contactsItem){
@@ -44,7 +49,8 @@ class ContactsAdapter(val dataSet: ContactResponse,
             : ContactsViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_layout, parent, false)
-        val contactsViewHolder = ContactsViewHolder(view)
+        val contactsViewHolder =
+            ContactsViewHolder(view)
         return contactsViewHolder
     }
 

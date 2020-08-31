@@ -1,4 +1,4 @@
-package com.example.contactstest
+package com.example.contactstest.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
@@ -25,7 +25,8 @@ data class ContactItem(
     val email: String,
     val address: String,
     val gender: String,
-    val phone: PhoneItem): Parcelable
+    val phone: PhoneItem
+): Parcelable
 
 /*
 public class ContactItem{
